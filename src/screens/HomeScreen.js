@@ -1,5 +1,5 @@
 import React from 'react';
-import {SafeAreaView, FlatList, StyleSheet} from 'react-native';
+import {SafeAreaView, FlatList, StyleSheet, RefreshControl} from 'react-native';
 import {Navigation} from 'react-native-navigation';
 import {ListItem, Text, AnimatableManager, Colors, BorderRadiuses, LoaderScreen} from 'react-native-ui-lib';
 import * as Animatable from 'react-native-animatable';
@@ -19,16 +19,23 @@ export default function homeScreen(serverApi) {
     state = {
       questions: [],
       isLoading: true,
+      isRefreshing: false,
     };
 
     componentDidMount() {
       this.loadData();
     }
 
-    async loadData() {
+    loadData = async () => {
       const questions = await serverApi.fetchQuestions();
       this.setState({questions, isLoading: false});
-    }
+    };
+
+    onRefresh = async () => {
+      this.setState({isRefreshing: true});
+      await this.loadData();
+      this.setState({isRefreshing: false});
+    };
 
     onPressQuestion = (item, index) => {
       Navigation.push(this.props.componentId, {
@@ -173,6 +180,8 @@ export default function homeScreen(serverApi) {
 
     keyExtractor = (item) => item.id;
 
+    renderRefreshControl = () => <RefreshControl refreshing={this.state.isRefreshing} onRefresh={this.onRefresh} />;
+
     render() {
       if (this.state.isLoading) {
         return <LoaderScreen message="Kraunami klausimai..." />;
@@ -180,7 +189,12 @@ export default function homeScreen(serverApi) {
 
       return (
         <SafeAreaView style={styles.container}>
-          <FlatList data={this.state.questions} renderItem={this.renderItem} keyExtractor={this.keyExtractor} />
+          <FlatList
+            data={this.state.questions}
+            renderItem={this.renderItem}
+            keyExtractor={this.keyExtractor}
+            refreshControl={this.renderRefreshControl()}
+          />
         </SafeAreaView>
       );
     }
