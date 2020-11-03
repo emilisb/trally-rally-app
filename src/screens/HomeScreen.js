@@ -30,7 +30,7 @@ export default function homeScreen(serverApi) {
       this.setState({questions, isLoading: false});
     }
 
-    onPressQuestion = (item) => {
+    onPressQuestion = (item, index) => {
       Navigation.push(this.props.componentId, {
         component: {
           name: SCREENS.QUESTION,
@@ -38,6 +38,11 @@ export default function homeScreen(serverApi) {
             item,
           },
           options: {
+            topBar: {
+              title: {
+                text: `Klausimas #${index + 1}`,
+              },
+            },
             animations: {
               push: {
                 content: {
@@ -130,7 +135,7 @@ export default function homeScreen(serverApi) {
     renderItem = ({item, index}) => {
       const animationProps = AnimatableManager.presets.fadeIn;
       const imageAnimationProps = AnimatableManager.getRandomDelay();
-      const onPress = () => this.onPressQuestion(item);
+      const onPress = () => this.onPressQuestion(item, index);
 
       return (
         <Animatable.View {...animationProps}>
