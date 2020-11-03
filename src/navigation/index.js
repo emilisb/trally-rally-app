@@ -10,7 +10,7 @@ export const registerComponents = () => {
   Navigation.registerComponent(SCREENS.HOME, () => require('../screens/HomeScreen').default(singletons.serverApi()));
 };
 
-export const setDefaultOptions = () => {
+export const createNavigation = () => {
   Navigation.setDefaultOptions({
     topBar: {
       visible: false,

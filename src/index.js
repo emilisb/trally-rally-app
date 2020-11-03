@@ -1,4 +1,4 @@
-import {registerComponents, setDefaultOptions} from './navigation';
+import {registerComponents, createNavigation} from './navigation';
 
 registerComponents();
-setDefaultOptions();
+createNavigation();
