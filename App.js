@@ -35,22 +35,21 @@ const App = () => {
       });
   }, []);
 
-  const renderItem = useCallback(({item}) => (
-    <>
-      <Text>{item.name}</Text>
-      <Image source={{uri: item.image}} style={styles.image} />
-    </>
-  ));
+  const renderItem = useCallback(
+    ({item}) => (
+      <>
+        <Text>{item.name}</Text>
+        <Image source={{uri: item.image}} style={styles.image} />
+      </>
+    ),
+    [],
+  );
 
-  const keyExtractor = useCallback((item) => item.id);
+  const keyExtractor = useCallback((item) => item.id, []);
 
   return (
     <SafeAreaView style={styles.container}>
-      <FlatList
-        data={dogs}
-        renderItem={renderItem}
-        keyExtractor={keyExtractor}
-      />
+      <FlatList data={dogs} renderItem={renderItem} keyExtractor={keyExtractor} />
     </SafeAreaView>
   );
 };
