@@ -8,14 +8,17 @@ const singletons = lazySingletons({
 
 export const registerComponents = () => {
   Navigation.registerComponent(SCREENS.HOME, () => require('../screens/HomeScreen').default(singletons.serverApi()));
+  Navigation.registerComponent(SCREENS.QUESTION, () =>
+    require('../screens/QuestionScreen').default(singletons.serverApi()),
+  );
 };
 
 export const createNavigation = () => {
-  Navigation.setDefaultOptions({
-    topBar: {
-      visible: false,
-    },
-  });
+  // Navigation.setDefaultOptions({
+  //   topBar: {
+  //     visible: false,
+  //   },
+  // });
 
   Navigation.events().registerAppLaunchedListener(() => {
     const root = {
