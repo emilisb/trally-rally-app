@@ -6,17 +6,19 @@ const singletons = lazySingletons({
   serverApi: () => new ServerApi(),
 });
 
-Navigation.registerComponent(SCREENS.HOME, () => require('../screens/HomeScreen').default(singletons.serverApi()));
+export const registerComponents = () => {
+  Navigation.registerComponent(SCREENS.HOME, () => require('../screens/HomeScreen').default(singletons.serverApi()));
+};
 
-Navigation.setDefaultOptions({
-  topBar: {
-    visible: false,
-  },
-});
+export const setDefaultOptions = () => {
+  Navigation.setDefaultOptions({
+    topBar: {
+      visible: false,
+    },
+  });
 
-Navigation.events().registerAppLaunchedListener(() => {
-  Navigation.setRoot({
-    root: {
+  Navigation.events().registerAppLaunchedListener(() => {
+    const root = {
       stack: {
         children: [
           {
@@ -26,9 +28,13 @@ Navigation.events().registerAppLaunchedListener(() => {
           },
         ],
       },
-    },
+    };
+
+    Navigation.setRoot({
+      root,
+    });
   });
-});
+};
 
 function lazySingletons(objects) {
   const lazyObjects = {};
