@@ -4,6 +4,7 @@ import {View, Text, TouchableOpacity, Colors} from 'react-native-ui-lib';
 import {RNCamera} from 'react-native-camera';
 import assets from '../../assets';
 import {Navigation} from 'react-native-navigation';
+import config from '../config';
 
 export const MODES = {
   photo: 'photo',
@@ -63,12 +64,13 @@ export default class CameraScreen extends React.PureComponent {
   };
 
   onBarCodeRead = (event) => {
-    if (this.readingBarCode) {
+    const {data} = event;
+    if (this.readingBarCode && data.includes(config.QR_MAGIC_WORD)) {
       this.readingBarCode = false;
       this.camera.pausePreview();
 
       if (this.props.onBarCodeRead) {
-        this.props.onBarCodeRead(event.data);
+        this.props.onBarCodeRead(data);
       }
     }
   };
