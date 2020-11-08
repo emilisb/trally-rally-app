@@ -1,3 +1,6 @@
+import axios from 'axios';
+import config from '../config';
+
 export class ServerApi {
   authToken = '';
 
@@ -7,59 +10,32 @@ export class ServerApi {
   }
 
   async login(code) {
-    const CORRECT_CODE = '123456';
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        if (code === CORRECT_CODE) {
-          resolve({success: true, authToken: 'my-auth-token', user: {id: 1, name: 'Emilis & Co.'}});
-        } else {
-          resolve({success: false});
-        }
-      }, 500);
+    return this.fetch({url: `${config.SERVER}/auth/login`, method: 'POST', body: {code}});
+  }
+
+  async submitAnswer(questionId, answer) {
+    return this.fetch({
+      url: `${config.SERVER}/questions/${questionId}`,
+      method: 'POST',
+      body: {answer},
+      withAuth: true,
     });
   }
 
   async fetchQuestions() {
-    const data = [
-      {
-        id: 1,
-        title: 'Šiaurės žvaigždė',
-        image: 'https://i.ytimg.com/vi/6mQkb8nweEw/maxresdefault.jpg',
-        type: 'photo',
-        question:
-          'In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used before final copy is available, but it may also be used to temporarily replace copy in a process called greeking, which allows designers to consider form without the meaning of the text influencing the design.',
-        points: 1,
-        submitted: false,
-        locked: false,
-      },
-      {
-        id: 2,
-        title: 'Mieliausias šuo',
-        image: 'https://i.ytimg.com/vi/6mQkb8nweEw/maxresdefault.jpg',
-        type: 'input',
-        question:
-          'In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used before final copy is available, but it may also be used to temporarily replace copy in a process called greeking, which allows designers to consider form without the meaning of the text influencing the design.',
-        points: 2,
-        submitted: true,
-        locked: false,
-      },
-      {
-        id: 3,
-        title: 'Surask Mane',
-        image: 'https://i.ytimg.com/vi/6mQkb8nweEw/maxresdefault.jpg',
-        type: 'qr',
-        question:
-          'In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used before final copy is available, but it may also be used to temporarily replace copy in a process called greeking, which allows designers to consider form without the meaning of the text influencing the design.',
-        points: 4,
-        submitted: false,
-        locked: false,
-      },
-    ];
+    return this.fetch({url: `${config.SERVER}/questions`, method: 'GET', withAuth: true});
+  }
 
-    return new Promise((resolve) =>
-      setTimeout(() => {
-        resolve(data);
-      }, 500),
-    );
+  async fetch({url, body, method, withAuth}) {
+    const defaultHeaders = {
+      'Content-Type': 'application/json',
+    };
+    const response = await axios({
+      url,
+      method,
+      data: body,
+      headers: withAuth ? {Authorization: this.authToken, ...defaultHeaders} : defaultHeaders,
+    });
+    return response.data;
   }
 }

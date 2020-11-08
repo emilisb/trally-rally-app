@@ -5,7 +5,7 @@ import {View, BorderRadiuses, Text, TextField, Button, Spacings} from 'react-nat
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import Icon from 'react-native-vector-icons/Entypo';
 import ScaledImage from '../components/ScaledImage';
-import {showSuccessToast} from '../components/Toast';
+import {showErrorToast, showSuccessToast} from '../components/Toast';
 import {SCREENS} from '../navigation/screens';
 import {MODES} from './CameraScreen';
 
@@ -29,8 +29,8 @@ export default function questionScreen(serverApi) {
     constructor(props) {
       super(props);
       this.state = {
-        answerPhoto: null,
-        answerInput: '',
+        answerPhoto: props.item.lastAnswer,
+        answerInput: props.item.lastAnswer,
       };
       Navigation.events().bindComponent(this);
     }
@@ -50,13 +50,29 @@ export default function questionScreen(serverApi) {
 
     onChangeText = (answerInput) => this.setState({answerInput});
 
-    onPressSave = () => {
-      Navigation.pop(this.props.componentId);
-      showSuccessToast('Atsakymas pateiktas');
+    onPressSave = async () => {
+      try {
+        const {answerInput} = this.state;
+        const {item, componentId, onDone} = this.props;
+        const response = await serverApi.submitAnswer(item.id, answerInput);
+
+        if (response && response.success) {
+          if (onDone) {
+            onDone(response.question);
+          }
+
+          Navigation.pop(componentId);
+          showSuccessToast('Atsakymas pateiktas');
+        } else {
+          throw new Error('Unable to save answer');
+        }
+      } catch (e) {
+        showErrorToast('Serverio klaida. Pabandykite dar kartą.');
+      }
     };
 
     onPhotoTaken = (data) => {
-      this.setState({answerPhoto: data.uri});
+      this.setState({answerPhoto: data.uri, answerInput: data.base64});
       this.dismissCamera();
     };
 

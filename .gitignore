@@ -61,3 +61,5 @@ buck-out/
 # NPM
 package-lock.json
 .eslintcache
+
+fake-server/public/uploads

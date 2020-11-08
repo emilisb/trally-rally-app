@@ -50,7 +50,6 @@ export default function loginScreen({serverApi, store}) {
           showErrorToast('Neteisingas prisijungimo kodas.');
         }
       } catch (e) {
-        console.warn(e);
         showErrorToast('Nenumatyta klaida, pamėginkite dar kartą.');
       } finally {
         this.setState({

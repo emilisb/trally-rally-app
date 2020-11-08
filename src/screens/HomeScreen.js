@@ -45,12 +45,18 @@ export default function homeScreen(serverApi) {
       this.setState({isRefreshing: false});
     };
 
+    onQuestionUpdate = (question) => {
+      const questions = this.state.questions.map((item) => (item.id === question.id ? question : item));
+      this.setState({questions});
+    };
+
     onPressQuestion = (item, index) => {
       Navigation.push(this.props.componentId, {
         component: {
           name: SCREENS.QUESTION,
           passProps: {
             item,
+            onDone: this.onQuestionUpdate,
           },
           options: {
             topBar: {
