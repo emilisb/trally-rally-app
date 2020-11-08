@@ -5,8 +5,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {phonecall} from 'react-native-communications';
 import {showErrorToast} from '../components/Toast';
 import {setLoggedInRoot} from '../navigation';
-
-const CONTACT_PHONE = '+37066666666';
+import {CONTACT_PHONE} from '../constants';
 
 export default function loginScreen({serverApi, store}) {
   return class LoginScreen extends React.PureComponent {
