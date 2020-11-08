@@ -1,10 +1,17 @@
 export class ServerApi {
+  authToken = '';
+
+  setAuthToken(authToken) {
+    this.authToken = authToken;
+    return this;
+  }
+
   async login(code) {
     const CORRECT_CODE = '123456';
     return new Promise((resolve) => {
       setTimeout(() => {
         if (code === CORRECT_CODE) {
-          resolve({success: true, token: 'my-auth-token'});
+          resolve({success: true, authToken: 'my-auth-token', user: {id: 1, name: 'Emilis & Co.'}});
         } else {
           resolve({success: false});
         }

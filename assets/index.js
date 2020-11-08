@@ -1,4 +1,7 @@
 export default {
+  get avatar() {
+    return require('./avatar.png');
+  },
   get logo() {
     return require('./logo.png');
   },

@@ -316,6 +316,8 @@ PODS:
     - React-RCTText
   - ReactNativeUiLib (3.0.4):
     - React
+  - RNCAsyncStorage (1.13.2):
+    - React
   - RNCPicker (1.8.1):
     - React-Core
   - RNDateTimePicker (2.6.2):
@@ -383,6 +385,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - ReactNativeNavigation (from `../node_modules/react-native-navigation`)
   - ReactNativeUiLib (from `../node_modules/react-native-ui-lib/lib`)
+  - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCPicker (from `../node_modules/@react-native-community/picker`)"
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
@@ -466,6 +469,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-navigation"
   ReactNativeUiLib:
     :path: "../node_modules/react-native-ui-lib/lib"
+  RNCAsyncStorage:
+    :path: "../node_modules/@react-native-async-storage/async-storage"
   RNCPicker:
     :path: "../node_modules/@react-native-community/picker"
   RNDateTimePicker:
@@ -521,6 +526,7 @@ SPEC CHECKSUMS:
   ReactCommon: 4167844018c9ed375cc01a843e9ee564399e53c3
   ReactNativeNavigation: 2f6571c37eaeb7d472fe8a3779d49d7aae32e75a
   ReactNativeUiLib: cde7263a7d308b60161cd286f95c9433e79f2f7d
+  RNCAsyncStorage: bc2f81cc1df90c267ce9ed30bb2dbc93b945a8ee
   RNCPicker: 914b557e20b3b8317b084aca9ff4b4edb95f61e4
   RNDateTimePicker: dc9dab744823a2c734dbc7362cdf57a3adba3c43
   RNGestureHandler: 7a5833d0f788dbd107fbb913e09aa0c1ff333c39

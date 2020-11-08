@@ -5,7 +5,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {showErrorToast} from '../components/Toast';
 import {setLoggedInRoot} from '../navigation';
 
-export default function loginScreen(serverApi) {
+export default function loginScreen({serverApi, store}) {
   return class LoginScreen extends React.PureComponent {
     static options() {
       return {
@@ -32,8 +32,13 @@ export default function loginScreen(serverApi) {
 
       try {
         this.setState({isLoading: true});
-        const {success} = await serverApi.login(code);
+        const {success, authToken, user} = await serverApi.login(code);
         if (success) {
+          serverApi.setAuthToken(authToken);
+
+          await store.setAuthToken(authToken);
+          await store.setUser(user);
+
           setLoggedInRoot();
         } else {
           showErrorToast('Neteisingas prisijungimo kodas.');

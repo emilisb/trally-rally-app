@@ -1,9 +1,11 @@
 import {Navigation} from 'react-native-navigation';
 import {SCREENS} from './screens';
 import {ServerApi} from '../services/server-api';
+import {GlobalStore} from '../store';
 
 const singletons = lazySingletons({
   serverApi: () => new ServerApi(),
+  store: () => new GlobalStore(),
 });
 
 export const registerComponents = () => {
@@ -12,12 +14,14 @@ export const registerComponents = () => {
     require('../screens/QuestionScreen').default(singletons.serverApi()),
   );
   Navigation.registerComponent(SCREENS.PROFILE, () =>
-    require('../screens/ProfileScreen').default(singletons.serverApi()),
+    require('../screens/ProfileScreen').default({store: singletons.store()}),
   );
-  Navigation.registerComponent(SCREENS.LOGIN, () => require('../screens/LoginScreen').default(singletons.serverApi()));
+  Navigation.registerComponent(SCREENS.LOGIN, () =>
+    require('../screens/LoginScreen').default({serverApi: singletons.serverApi(), store: singletons.store()}),
+  );
   Navigation.registerComponent(SCREENS.WELCOME, () => require('../screens/WelcomeScreen').default());
   Navigation.registerComponent(SCREENS.LOGIN_GATE, () =>
-    require('../screens/LoginGateScreen').default(singletons.serverApi()),
+    require('../screens/LoginGateScreen').default({serverApi: singletons.serverApi(), store: singletons.store()}),
   );
   Navigation.registerComponent(SCREENS.TOAST_OVERLAY, () => require('../components/Toast/component').default);
 };
@@ -42,8 +46,7 @@ export const createNavigation = () => {
       selectedTextColor: Colors.primaryColor,
     },
     statusBar: {
-      backgroundColor: 'white',
-      style: 'dark',
+      style: 'light',
     },
   });
 

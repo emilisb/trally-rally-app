@@ -57,7 +57,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     right: 0,
     opacity: 0.15,
-    backgroundColor: 'black',
   },
   logo: {
     tintColor: Colors.primaryColor,
