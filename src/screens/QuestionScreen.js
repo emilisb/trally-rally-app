@@ -30,6 +30,7 @@ export default function questionScreen(serverApi) {
       super(props);
       this.state = {
         answerPhoto: null,
+        answerInput: '',
       };
       Navigation.events().bindComponent(this);
     }
@@ -47,6 +48,8 @@ export default function questionScreen(serverApi) {
       }
     };
 
+    onChangeText = (answerInput) => this.setState({answerInput});
+
     onPressSave = () => {
       Navigation.pop(this.props.componentId);
       showSuccessToast('Atsakymas pateiktas');
@@ -57,9 +60,11 @@ export default function questionScreen(serverApi) {
       this.dismissCamera();
     };
 
-    onBarCodeRead = (data) => {
-      // this.setState({answerPhoto: data.uri});
+    onBarCodeRead = (answerInput) => {
       this.dismissCamera();
+      this.setState({answerInput}, () => {
+        this.onPressSave();
+      });
     };
 
     onPressTakePhoto = async () => {
@@ -133,6 +138,8 @@ export default function questionScreen(serverApi) {
             showCharacterCounter
             placeholder="Įrašykite atsakymą"
             maxLength={60}
+            onChangeText={this.onChangeText}
+            value={this.state.answerInput}
           />
         </View>
       );
