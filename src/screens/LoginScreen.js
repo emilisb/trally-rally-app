@@ -1,9 +1,12 @@
 import React from 'react';
 import {StyleSheet, ActivityIndicator} from 'react-native';
-import {View, TextField, Spacings, Button, Colors} from 'react-native-ui-lib';
+import {View, TextField, Spacings, Button, Colors, Text, TouchableOpacity} from 'react-native-ui-lib';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {phonecall} from 'react-native-communications';
 import {showErrorToast} from '../components/Toast';
 import {setLoggedInRoot} from '../navigation';
+
+const CONTACT_PHONE = '+37066666666';
 
 export default function loginScreen({serverApi, store}) {
   return class LoginScreen extends React.PureComponent {
@@ -23,6 +26,10 @@ export default function loginScreen({serverApi, store}) {
     };
 
     onChangeCode = (code) => this.setState({code});
+
+    onPressContact = () => {
+      phonecall(CONTACT_PHONE, true);
+    };
 
     onPressLogIn = async () => {
       const {code, isLoading} = this.state;
@@ -75,6 +82,14 @@ export default function loginScreen({serverApi, store}) {
             >
               {isLoading ? <ActivityIndicator animating color={Colors.white} size="small" /> : null}
             </Button>
+            <TouchableOpacity onPress={this.onPressContact}>
+              <Text text80 dark10 center marginT-20>
+                Praradote prisijungimą?{' '}
+                <Text text80BO dark10>
+                  Susisiekite su mumis
+                </Text>
+              </Text>
+            </TouchableOpacity>
           </KeyboardAwareScrollView>
         </View>
       );
