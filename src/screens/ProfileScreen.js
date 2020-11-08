@@ -58,9 +58,9 @@ export default function profileScreen({store}) {
       const {user} = this.state;
       return (
         <View useSafeArea flex>
-          <View centerH paddingT-10 paddingB-30 bg-primaryColor>
+          <View centerH paddingT-10 paddingB-20 bg-primaryColor>
             <Avatar size={120} source={assets.avatar} />
-            <Text center text70BO white marginT-8>
+            <Text center text70BO white marginT-20>
               {user.name}
             </Text>
           </View>
