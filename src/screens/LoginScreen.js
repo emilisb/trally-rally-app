@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, ActivityIndicator} from 'react-native';
-import {View, TextField, Spacings, Button, Text, Colors} from 'react-native-ui-lib';
+import {View, TextField, Spacings, Button, Colors} from 'react-native-ui-lib';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {showErrorToast} from '../components/Toast';
 import {setLoggedInRoot} from '../navigation';

@@ -143,16 +143,16 @@ export const setLoggedInRoot = () => {
 
 function lazySingletons(objects) {
   const lazyObjects = {};
-  const singletons = new Map();
+  const instances = new Map();
 
   Object.keys(objects).forEach((name) => {
     lazyObjects[name] = function () {
-      if (singletons.has(name)) {
-        return singletons.get(name);
+      if (instances.has(name)) {
+        return instances.get(name);
       }
 
       const newObject = objects[name]();
-      singletons.set(name, newObject);
+      instances.set(name, newObject);
 
       return newObject;
     };
