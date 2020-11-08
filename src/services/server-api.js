@@ -20,6 +20,19 @@ export class ServerApi {
     return data;
   }
 
+  async login(code) {
+    const CORRECT_CODE = '123456';
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        if (code === CORRECT_CODE) {
+          resolve({success: true, token: 'my-auth-token'});
+        } else {
+          resolve({success: false});
+        }
+      }, 500);
+    });
+  }
+
   async fetchQuestions() {
     const data = [
       {

@@ -5,6 +5,7 @@ import {View, BorderRadiuses, Text, TextField, Button} from 'react-native-ui-lib
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import Icon from 'react-native-vector-icons/Entypo';
 import ScaledImage from '../components/ScaledImage';
+import {showSuccessToast} from '../components/Toast';
 
 export default function questionScreen(serverApi) {
   return class QuestionScreen extends React.PureComponent {
@@ -34,6 +35,7 @@ export default function questionScreen(serverApi) {
 
     onPressSave() {
       Navigation.pop(this.props.componentId);
+      showSuccessToast('Atsakymas pateiktas');
     }
 
     renderTakePhotoButton() {
