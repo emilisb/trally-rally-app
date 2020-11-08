@@ -15,6 +15,7 @@ export const registerComponents = () => {
     require('../screens/ProfileScreen').default(singletons.serverApi()),
   );
   Navigation.registerComponent(SCREENS.LOGIN, () => require('../screens/LoginScreen').default(singletons.serverApi()));
+  Navigation.registerComponent(SCREENS.WELCOME, () => require('../screens/WelcomeScreen').default());
   Navigation.registerComponent(SCREENS.LOGIN_GATE, () =>
     require('../screens/LoginGateScreen').default(singletons.serverApi()),
   );
@@ -24,12 +25,25 @@ export const registerComponents = () => {
 export const createNavigation = () => {
   const {Colors} = require('react-native-ui-lib');
   Navigation.setDefaultOptions({
-    // topBar: {
-    //   visible: false,
-    // },
+    topBar: {
+      title: {
+        color: Colors.white,
+      },
+      background: {
+        color: Colors.primaryColor,
+      },
+      backButton: {
+        color: Colors.white,
+      },
+      rightButtonColor: Colors.white,
+    },
     bottomTab: {
       selectedIconColor: Colors.primaryColor,
       selectedTextColor: Colors.primaryColor,
+    },
+    statusBar: {
+      backgroundColor: 'white',
+      style: 'dark',
     },
   });
 
@@ -62,7 +76,7 @@ export const setGuestRoot = () => {
       children: [
         {
           component: {
-            name: SCREENS.LOGIN,
+            name: SCREENS.WELCOME,
           },
         },
       ],

@@ -6,5 +6,6 @@ export const SCREENS = {
   PROFILE: `${PREFIX}.profile`,
   LOGIN: `${PREFIX}.login`,
   LOGIN_GATE: `${PREFIX}.loginGate`,
+  WELCOME: `${PREFIX}.welcome`,
   TOAST_OVERLAY: `${PREFIX}.toast`,
 };

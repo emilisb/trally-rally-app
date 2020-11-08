@@ -1,8 +1,8 @@
-import {Colors, Typography, Spacings} from 'react-native-ui-lib';
+import {Colors, Typography, Spacings, ThemeManager} from 'react-native-ui-lib';
 
 export const registerTheme = () => {
   Colors.loadColors({
-    primaryColor: '#2364AA',
+    primaryColor: '#454F86',
     secondaryColor: '#81C3D7',
     textColor: '##221D23',
     errorColor: Colors.red30,
@@ -20,5 +20,21 @@ export const registerTheme = () => {
     page: 20,
     card: 12,
     gridGutter: 16,
+  });
+
+  ThemeManager.setComponentTheme('TextField', {
+    floatOnFocus: true,
+    floatingPlaceholder: true,
+    floatingPlaceholderColor: {focus: Colors.primaryColor},
+    underlineColor: {
+      default: Colors.dark70,
+      focus: Colors.primaryColor,
+      error: Colors.errorColor,
+    },
+  });
+
+  ThemeManager.setComponentTheme('Button', {
+    color: Colors.white,
+    backgroundColor: Colors.primaryColor,
   });
 };

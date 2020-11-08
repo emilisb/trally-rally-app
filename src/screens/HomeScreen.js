@@ -16,6 +16,16 @@ const SPRING_CONFIG = {mass: 2, damping: 500, stiffness: 200};
 
 export default function homeScreen(serverApi) {
   return class HomeScreen extends React.PureComponent {
+    static options() {
+      return {
+        topBar: {
+          title: {
+            text: 'Klausimai',
+          },
+        },
+      };
+    }
+
     state = {
       questions: [],
       isLoading: true,
