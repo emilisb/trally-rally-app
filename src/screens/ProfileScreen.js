@@ -89,7 +89,7 @@ export default function profileScreen({store}) {
                 <Icon name="phone" size={20} />
               </ListItem.Part>
               <ListItem.Part middle marginL-20 column>
-                <Text text70BO>Susisiekti</Text>
+                <Text text70>Susisiekti</Text>
               </ListItem.Part>
               <ListItem.Part right>
                 <Icon name="chevron-right" size={15} />

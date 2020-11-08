@@ -29,8 +29,9 @@ export default function questionScreen(serverApi) {
     constructor(props) {
       super(props);
       this.state = {
-        answerPhoto: props.item.lastAnswer,
-        answerInput: props.item.lastAnswer,
+        photoUri: props.item.type === 'photo' ? props.item.lastAnswer : null,
+        answer: props.item.lastAnswer,
+        photoId: 0, // Used for refreshing the image preview after retaking a photo
       };
       Navigation.events().bindComponent(this);
     }
@@ -48,13 +49,13 @@ export default function questionScreen(serverApi) {
       }
     };
 
-    onChangeText = (answerInput) => this.setState({answerInput});
+    onChangeText = (answer) => this.setState({answer});
 
     onPressSave = async () => {
       try {
-        const {answerInput} = this.state;
+        const {answer} = this.state;
         const {item, componentId, onDone} = this.props;
-        const response = await serverApi.submitAnswer(item.id, answerInput);
+        const response = await serverApi.submitAnswer(item.id, answer);
 
         if (response && response.success) {
           if (onDone) {
@@ -72,13 +73,13 @@ export default function questionScreen(serverApi) {
     };
 
     onPhotoTaken = (data) => {
-      this.setState({answerPhoto: data.uri, answerInput: data.base64});
+      this.setState(({photoId}) => ({photoUri: data.uri, answer: data.base64, photoId: photoId + 1}));
       this.dismissCamera();
     };
 
-    onBarCodeRead = (answerInput) => {
+    onBarCodeRead = (answer) => {
       this.dismissCamera();
-      this.setState({answerInput}, () => {
+      this.setState({answer}, () => {
         this.onPressSave();
       });
     };
@@ -119,11 +120,11 @@ export default function questionScreen(serverApi) {
     };
 
     renderTakePhotoButton() {
-      const {answerPhoto} = this.state;
+      const {photoUri} = this.state;
       return (
         <View marginT-12>
           <Button
-            label={answerPhoto ? 'Pakeisti nuotrauką' : 'Pateikti nuotrauką'}
+            label={photoUri ? 'Pakeisti nuotrauką' : 'Pateikti nuotrauką'}
             iconSource={Icon.getImageSourceSync('camera', 24)}
             iconStyle={styles.photoIcon}
             onPress={this.onPressTakePhoto}
@@ -155,7 +156,7 @@ export default function questionScreen(serverApi) {
             placeholder="Įrašykite atsakymą"
             maxLength={60}
             onChangeText={this.onChangeText}
-            value={this.state.answerInput}
+            value={this.state.answer}
           />
         </View>
       );
@@ -174,7 +175,7 @@ export default function questionScreen(serverApi) {
     }
 
     render() {
-      const {answerPhoto} = this.state;
+      const {photoUri, photoId} = this.state;
       const {item} = this.props;
       const width = Dimensions.get('window').width - 40;
       return (
@@ -192,9 +193,9 @@ export default function questionScreen(serverApi) {
             {item.question}
           </Text>
           {this.renderAnswer()}
-          {answerPhoto ? (
-            <View marginT-20>
-              <ScaledImage uri={answerPhoto} width={width} customStyle={styles.image} />
+          {photoUri ? (
+            <View marginT-20 key={photoId}>
+              <ScaledImage uri={photoUri} width={width} customStyle={styles.image} />
             </View>
           ) : null}
         </KeyboardAwareScrollView>

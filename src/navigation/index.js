@@ -33,6 +33,7 @@ export const createNavigation = () => {
     topBar: {
       title: {
         color: Colors.white,
+        fontWeight: 'bold',
       },
       background: {
         color: Colors.primaryColor,

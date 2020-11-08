@@ -1,14 +1,14 @@
 const express = require('express');
 const app = express();
 const port = 3000;
-const host = 'http://localhost';
+const host = 'http://192.168.1.186';
 
 const fs = require('fs');
 const path = require('path');
 
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({extended: false}));
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '10mb'}));
 
 app.use(express.static(path.join(__dirname, 'public')));
 

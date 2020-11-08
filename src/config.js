@@ -1,3 +1,3 @@
 export default {
-  SERVER: 'http://localhost:3000',
+  SERVER: 'http://192.168.1.186:3000',
 };
