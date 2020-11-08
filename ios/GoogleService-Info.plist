@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>58094989239-dak3dt5gt4vfbeo4nq2c2ng2cd3padsb.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.58094989239-dak3dt5gt4vfbeo4nq2c2ng2cd3padsb</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDMuxvABTp5pcQEYPovspmJZUsLEBeuvx8</string>
+	<key>GCM_SENDER_ID</key>
+	<string>58094989239</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>org.reactjs.native.example.TrallyRally</string>
+	<key>PROJECT_ID</key>
+	<string>trallyrally</string>
+	<key>STORAGE_BUCKET</key>
+	<string>trallyrally.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:58094989239:ios:82b8450ef6d4db2ac5c232</string>
+	<key>DATABASE_URL</key>
+	<string>https://trallyrally.firebaseio.com</string>
+</dict>
+</plist>

@@ -7,5 +7,6 @@ export const SCREENS = {
   LOGIN: `${PREFIX}.login`,
   LOGIN_GATE: `${PREFIX}.loginGate`,
   WELCOME: `${PREFIX}.welcome`,
+  CAMERA: `${PREFIX}.camera`,
   TOAST_OVERLAY: `${PREFIX}.toast`,
 };

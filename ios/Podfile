@@ -9,6 +9,9 @@ target 'TrallyRally' do
   use_react_native!(:path => config["reactNativePath"])
 
   pod 'OpenSSL-Universal', '1.0.2.19'
+  pod 'react-native-camera', path: '../node_modules/react-native-camera', subspecs: [
+    'BarcodeDetectorMLKit'
+  ]
 
   target 'TrallyRallyTests' do
     inherit! :complete

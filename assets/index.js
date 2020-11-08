@@ -8,4 +8,7 @@ export default {
   get loginVideo() {
     return require('./login.mp4');
   },
+  get x() {
+    return require('./x.png');
+  },
 };

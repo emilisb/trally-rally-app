@@ -23,6 +23,7 @@ export const registerComponents = () => {
   Navigation.registerComponent(SCREENS.LOGIN_GATE, () =>
     require('../screens/LoginGateScreen').default({serverApi: singletons.serverApi(), store: singletons.store()}),
   );
+  Navigation.registerComponent(SCREENS.CAMERA, () => require('../screens/CameraScreen').default);
   Navigation.registerComponent(SCREENS.TOAST_OVERLAY, () => require('../components/Toast/component').default);
 };
 
@@ -47,6 +48,10 @@ export const createNavigation = () => {
     },
     statusBar: {
       style: 'light',
+    },
+    layout: {
+      backgroundColor: Colors.white,
+      componentBackgroundColor: Colors.white,
     },
   });
 

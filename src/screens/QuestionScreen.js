@@ -1,11 +1,13 @@
 import React from 'react';
 import {Dimensions, StyleSheet} from 'react-native';
 import {Navigation} from 'react-native-navigation';
-import {View, BorderRadiuses, Text, TextField, Button} from 'react-native-ui-lib';
+import {View, BorderRadiuses, Text, TextField, Button, Spacings} from 'react-native-ui-lib';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import Icon from 'react-native-vector-icons/Entypo';
 import ScaledImage from '../components/ScaledImage';
 import {showSuccessToast} from '../components/Toast';
+import {SCREENS} from '../navigation/screens';
+import {MODES} from './CameraScreen';
 
 export default function questionScreen(serverApi) {
   return class QuestionScreen extends React.PureComponent {
@@ -22,8 +24,13 @@ export default function questionScreen(serverApi) {
       };
     }
 
+    cameraComponentId = null;
+
     constructor(props) {
       super(props);
+      this.state = {
+        answerPhoto: null,
+      };
       Navigation.events().bindComponent(this);
     }
 
@@ -33,18 +40,72 @@ export default function questionScreen(serverApi) {
       }
     }
 
-    onPressSave() {
+    dismissCamera = () => {
+      if (this.cameraComponentId) {
+        Navigation.dismissModal(this.cameraComponentId);
+        this.cameraComponentId = null;
+      }
+    };
+
+    onPressSave = () => {
       Navigation.pop(this.props.componentId);
       showSuccessToast('Atsakymas pateiktas');
-    }
+    };
+
+    onPhotoTaken = (data) => {
+      this.setState({answerPhoto: data.uri});
+      this.dismissCamera();
+    };
+
+    onBarCodeRead = (data) => {
+      // this.setState({answerPhoto: data.uri});
+      this.dismissCamera();
+    };
+
+    onPressTakePhoto = async () => {
+      this.cameraComponentId = await Navigation.showModal({
+        stack: {
+          children: [
+            {
+              component: {
+                name: SCREENS.CAMERA,
+                passProps: {
+                  onPhotoTaken: this.onPhotoTaken,
+                },
+              },
+            },
+          ],
+        },
+      });
+    };
+
+    onPressScanQr = async () => {
+      this.cameraComponentId = await Navigation.showModal({
+        stack: {
+          children: [
+            {
+              component: {
+                name: SCREENS.CAMERA,
+                passProps: {
+                  mode: MODES.barCode,
+                  onBarCodeRead: this.onBarCodeRead,
+                },
+              },
+            },
+          ],
+        },
+      });
+    };
 
     renderTakePhotoButton() {
+      const {answerPhoto} = this.state;
       return (
         <View marginT-12>
           <Button
-            label="Padaryti nuotrauką"
+            label={answerPhoto ? 'Pakeisti nuotrauką' : 'Pateikti nuotrauką'}
             iconSource={Icon.getImageSourceSync('camera', 24)}
             iconStyle={styles.photoIcon}
+            onPress={this.onPressTakePhoto}
           />
         </View>
       );
@@ -57,6 +118,7 @@ export default function questionScreen(serverApi) {
             label="Nuskenuoti QR kodą"
             iconSource={Icon.getImageSourceSync('camera', 24)}
             iconStyle={styles.photoIcon}
+            onPress={this.onPressScanQr}
           />
         </View>
       );
@@ -89,6 +151,7 @@ export default function questionScreen(serverApi) {
     }
 
     render() {
+      const {answerPhoto} = this.state;
       const {item} = this.props;
       const width = Dimensions.get('window').width - 40;
       return (
@@ -106,6 +169,11 @@ export default function questionScreen(serverApi) {
             {item.question}
           </Text>
           {this.renderAnswer()}
+          {answerPhoto ? (
+            <View marginT-20>
+              <ScaledImage uri={answerPhoto} width={width} customStyle={styles.image} />
+            </View>
+          ) : null}
         </KeyboardAwareScrollView>
       );
     }
@@ -114,8 +182,8 @@ export default function questionScreen(serverApi) {
 
 const styles = StyleSheet.create({
   contentContainer: {
-    marginTop: 20,
-    marginHorizontal: 20,
+    paddingVertical: 20,
+    paddingHorizontal: Spacings.page,
   },
   image: {
     borderRadius: BorderRadiuses.br20,
