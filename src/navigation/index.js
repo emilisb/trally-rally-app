@@ -1,14 +1,11 @@
-import {Navigation} from 'react-native-navigation';
-import {SCREENS} from './screens';
-import {ServerApi} from '../services/server-api';
-import {GlobalStore} from '../store';
-
 const singletons = lazySingletons({
-  serverApi: () => new ServerApi(),
-  store: () => new GlobalStore(),
+  serverApi: () => new (require('../services/server-api').ServerApi)(),
+  store: () => new (require('../store').GlobalStore)(),
 });
 
 export const registerComponents = () => {
+  const {Navigation} = require('react-native-navigation');
+  const {SCREENS} = require('./screens');
   Navigation.registerComponent(SCREENS.HOME, () => require('../screens/HomeScreen').default(singletons.serverApi()));
   Navigation.registerComponent(SCREENS.QUESTION, () =>
     require('../screens/QuestionScreen').default(singletons.serverApi()),
@@ -17,17 +14,24 @@ export const registerComponents = () => {
     require('../screens/ProfileScreen').default({store: singletons.store()}),
   );
   Navigation.registerComponent(SCREENS.LOGIN, () =>
-    require('../screens/LoginScreen').default({serverApi: singletons.serverApi(), store: singletons.store()}),
+    require('../screens/LoginScreen').default({
+      serverApi: singletons.serverApi(),
+      store: singletons.store(),
+    }),
   );
   Navigation.registerComponent(SCREENS.WELCOME, () => require('../screens/WelcomeScreen').default());
   Navigation.registerComponent(SCREENS.LOGIN_GATE, () =>
-    require('../screens/LoginGateScreen').default({serverApi: singletons.serverApi(), store: singletons.store()}),
+    require('../screens/LoginGateScreen').default({
+      serverApi: singletons.serverApi(),
+      store: singletons.store(),
+    }),
   );
   Navigation.registerComponent(SCREENS.CAMERA, () => require('../screens/CameraScreen').default);
   Navigation.registerComponent(SCREENS.TOAST_OVERLAY, () => require('../components/Toast/component').default);
 };
 
 export const createNavigation = () => {
+  const {Navigation} = require('react-native-navigation');
   const {Colors} = require('react-native-ui-lib');
   Navigation.setDefaultOptions({
     topBar: {
@@ -62,6 +66,8 @@ export const createNavigation = () => {
 };
 
 const setInitialRoot = () => {
+  const {Navigation} = require('react-native-navigation');
+  const {SCREENS} = require('./screens');
   const root = {
     stack: {
       children: [
@@ -80,6 +86,8 @@ const setInitialRoot = () => {
 };
 
 export const setGuestRoot = () => {
+  const {Navigation} = require('react-native-navigation');
+  const {SCREENS} = require('./screens');
   const root = {
     stack: {
       children: [
@@ -98,7 +106,9 @@ export const setGuestRoot = () => {
 };
 
 export const setLoggedInRoot = () => {
+  const {Navigation} = require('react-native-navigation');
   const Icon = require('react-native-vector-icons/FontAwesome');
+  const {SCREENS} = require('./screens');
   const root = {
     bottomTabs: {
       id: 'BOTTOM_TABS_LAYOUT',
