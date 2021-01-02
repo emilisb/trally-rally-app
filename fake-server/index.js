@@ -1,7 +1,9 @@
 const express = require('express');
+const {measureDistance} = require('./helpers');
+
 const app = express();
 const port = 3000;
-const host = 'http://localhost:3000';
+const host = 'http://localhost';
 
 const fs = require('fs');
 const path = require('path');
@@ -41,7 +43,13 @@ app.post('/auth/login', (req, res) => {
 
 app.get('/questions', (req, res) => {
   validateAuth(req.headers);
-  res.json(questions);
+
+  const {lat: latString, long: longString} = req.query;
+  const lat = parseFloat(latString);
+  const long = parseFloat(longString);
+  const converter = getQuestionConverter({lat, long});
+
+  res.json(questions.map(converter));
 });
 
 app.post('/questions/:id', (req, res) => {
@@ -76,4 +84,17 @@ function validateAuth(headers) {
   if (authToken !== AUTH_TOKEN) {
     throw new Error('Unauthenticated');
   }
+}
+
+function getQuestionConverter({lat, long}) {
+  return (question, index) => {
+    const {coordinates, maxDistance} = question;
+    const isLocked = measureDistance(lat, long, coordinates.lat, coordinates.long) > maxDistance;
+    return {
+      ...question,
+      title: isLocked ? `-Užrakintas Klausimas ${index + 1}-` : question.title,
+      question: !isLocked ? question.title : '',
+      locked: isLocked,
+    };
+  };
 }

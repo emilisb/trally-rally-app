@@ -22,8 +22,8 @@ export class ServerApi {
     });
   }
 
-  async fetchQuestions() {
-    return this.fetch({url: `${config.SERVER}/questions`, method: 'GET', withAuth: true});
+  async fetchQuestions({lat, long}) {
+    return this.fetch({url: `${config.SERVER}/questions?lat=${lat}&long=${long}`, method: 'GET', withAuth: true});
   }
 
   async fetch({url, body, method, withAuth}) {

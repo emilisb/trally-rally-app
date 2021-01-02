@@ -2,8 +2,10 @@ import React from 'react';
 import {FlatList, RefreshControl} from 'react-native';
 import {Navigation} from 'react-native-navigation';
 import {View, LoaderScreen} from 'react-native-ui-lib';
+import Geolocation from '@react-native-community/geolocation';
 import {SCREENS} from '../navigation/screens';
 import {QuestionListItem} from '../components/QuestionListItem';
+import {showErrorToast, showGenericToast} from '../components/Toast';
 
 const MULTIPLIER = 1.2;
 const POP_MULTIPLIER = 1.0;
@@ -14,6 +16,8 @@ const SPRING_CONFIG = {mass: 2, damping: 500, stiffness: 200};
 
 export default function homeScreen(serverApi) {
   return class HomeScreen extends React.PureComponent {
+    positionWatchId = null;
+
     static options() {
       return {
         topBar: {
@@ -26,17 +30,43 @@ export default function homeScreen(serverApi) {
 
     state = {
       questions: [],
+      unlockedQuestion: null,
       isLoading: true,
       isRefreshing: false,
+      lat: 0,
+      long: 0,
     };
 
     componentDidMount() {
       this.loadData();
+      this.setPositionWatcher();
     }
 
+    componentWillUnmount() {
+      if (this.positionWatchId) {
+        Geolocation.clearWatch(this.positionWatchId);
+        this.positionWatchId = null;
+      }
+    }
+
+    setPositionWatcher = () => {
+      this.positionWatchId = Geolocation.watchPosition(this.onPositionChange, this.onPositionError, {
+        maximumAge: 0,
+        enableHighAccuracy: true,
+        distanceFilter: 5,
+      });
+    };
+
     loadData = async () => {
-      const questions = await serverApi.fetchQuestions();
-      this.setState({questions, isLoading: false});
+      const {lat, long, unlockedQuestion: prevUnlockedQuestion} = this.state;
+      const questions = await serverApi.fetchQuestions({lat, long});
+      const unlockedQuestion = questions.find((item) => !item.locked);
+      this.setState({questions, unlockedQuestion: unlockedQuestion?.id, isLoading: false});
+
+      const isNewUnlock = unlockedQuestion?.id !== prevUnlockedQuestion;
+      if (unlockedQuestion && isNewUnlock) {
+        this.onQuestionUnlocked(unlockedQuestion);
+      }
     };
 
     onRefresh = async () => {
@@ -45,12 +75,32 @@ export default function homeScreen(serverApi) {
       this.setState({isRefreshing: false});
     };
 
+    onPositionChange = (info) => {
+      if (info?.coords) {
+        const {latitude, longitude} = info.coords;
+        this.setState({lat: latitude, long: longitude}, this.loadData);
+      }
+    };
+
+    onPositionError = ({code, message}) => {
+      showErrorToast('Nepavyko aptikti Jūsų vietovės.');
+      this.setState({lat: 0, long: 0}, this.loadData);
+    };
+
+    onQuestionUnlocked = (question) => {
+      showGenericToast(`Klausimas "${question.title}" atrakintas.`);
+    };
+
     onQuestionUpdate = (question) => {
       const questions = this.state.questions.map((item) => (item.id === question.id ? question : item));
       this.setState({questions});
     };
 
     onPressQuestion = (item, index) => {
+      if (item.locked) {
+        return;
+      }
+
       Navigation.push(this.props.componentId, {
         component: {
           name: SCREENS.QUESTION,

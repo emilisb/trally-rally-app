@@ -11,6 +11,11 @@ module.exports = [
     submitted: false,
     locked: false,
     lastAnswer: null,
+    maxDistance: 30,
+    coordinates: {
+      lat: 37.33233141,
+      long: -122.0312186,
+    },
   },
   {
     id: 2,
@@ -23,6 +28,11 @@ module.exports = [
     submitted: false,
     locked: false,
     lastAnswer: null,
+    maxDistance: 30,
+    coordinates: {
+      lat: 47.33233141,
+      long: -122.0312186,
+    },
   },
   {
     id: 3,
@@ -35,5 +45,10 @@ module.exports = [
     submitted: false,
     locked: false,
     lastAnswer: null,
+    maxDistance: 30,
+    coordinates: {
+      lat: 57.33233141,
+      long: -122.0312186,
+    },
   },
 ];

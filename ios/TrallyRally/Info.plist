@@ -39,10 +39,12 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>Kamera reikalinga atsakymui į foto klausimus.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Duokite leidimą pasiekti vietovę, kad galėtume aptikti, jog jūs esate klausimo atrakinimo vietoje.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Duokite leidimą pasiekti vietovę, kad galėtume aptikti, jog jūs esate klausimo atrakinimo vietoje.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Kamera reikalinga atsakymui į foto klausimus.</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
@@ -61,6 +63,10 @@
 		<string>Octicons.ttf</string>
 		<string>Zocial.ttf</string>
 		<string>Fontisto.ttf</string>
+	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>location</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

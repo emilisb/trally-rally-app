@@ -1,5 +1,7 @@
 import React from 'react';
+import {PixelRatio} from 'react-native';
 import {ListItem, Text, AnimatableManager, Colors, BorderRadiuses} from 'react-native-ui-lib';
+import Icon from 'react-native-vector-icons/Entypo';
 import * as Animatable from 'react-native-animatable';
 import {getPointsLabel} from '../helpers/number-formats';
 import {getQuestionType, getSubmissionStatus} from '../helpers/question-labels';
@@ -9,13 +11,20 @@ export const QuestionListItem = React.memo(({item, index, onPress}) => {
   const animationProps = AnimatableManager.presets.fadeIn;
   const imageAnimationProps = AnimatableManager.getRandomDelay();
   const onPressItem = () => onPress(item, index);
+  const isLocked = item.locked;
+  const imageSource = isLocked
+    ? Icon.getImageSourceSync('lock', PixelRatio.getPixelSizeForLayoutSize(54), Colors.primaryColor)
+    : {uri: item.image};
+  const subtitle = isLocked
+    ? `Klausimas atsirakins ${item.maxDistance} m. atstumu nuo ieškomos vietos`
+    : getQuestionType(item.type);
 
   return (
     <Animatable.View {...animationProps}>
       <ListItem activeBackgroundColor={Colors.dark60} activeOpacity={0.3} height={77.5} onPress={onPressItem}>
         <ListItem.Part left>
           <Animatable.Image
-            source={{uri: item.image}}
+            source={imageSource}
             style={styles.image}
             {...imageAnimationProps}
             nativeID={`image${item.id}`}
@@ -31,8 +40,8 @@ export const QuestionListItem = React.memo(({item, index, onPress}) => {
             </Text>
           </ListItem.Part>
           <ListItem.Part>
-            <Text flex marginR-10 text90 dark40 numberOfLines={1}>
-              {getQuestionType(item.type)}
+            <Text flex marginR-10 text90 dark40 numberOfLines={2}>
+              {subtitle}
             </Text>
             <Text text90 numberOfLines={1} color={item.submitted ? Colors.green20 : Colors.dark10}>
               {getSubmissionStatus(item.submitted)}
