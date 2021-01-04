@@ -24,8 +24,6 @@ export default function questionScreen(serverApi) {
       };
     }
 
-    cameraComponentId = null;
-
     constructor(props) {
       super(props);
       this.state = {
@@ -41,13 +39,6 @@ export default function questionScreen(serverApi) {
         this.onPressSave();
       }
     }
-
-    dismissCamera = () => {
-      if (this.cameraComponentId) {
-        Navigation.dismissModal(this.cameraComponentId);
-        this.cameraComponentId = null;
-      }
-    };
 
     onChangeText = (answer) => this.setState({answer});
 
@@ -74,18 +65,14 @@ export default function questionScreen(serverApi) {
 
     onPhotoTaken = (data) => {
       this.setState(({photoId}) => ({photoUri: data.uri, answer: data.base64, photoId: photoId + 1}));
-      this.dismissCamera();
     };
 
     onBarCodeRead = (answer) => {
-      this.dismissCamera();
-      this.setState({answer}, () => {
-        this.onPressSave();
-      });
+      this.setState({answer}, this.onPressSave);
     };
 
-    onPressTakePhoto = async () => {
-      this.cameraComponentId = await Navigation.showModal({
+    onPressTakePhoto = () => {
+      Navigation.showModal({
         stack: {
           children: [
             {
@@ -101,8 +88,8 @@ export default function questionScreen(serverApi) {
       });
     };
 
-    onPressScanQr = async () => {
-      this.cameraComponentId = await Navigation.showModal({
+    onPressScanQr = () => {
+      Navigation.showModal({
         stack: {
           children: [
             {

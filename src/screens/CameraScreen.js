@@ -39,9 +39,11 @@ export default class CameraScreen extends React.PureComponent {
 
   navigationButtonPressed({buttonId}) {
     if (buttonId === 'dismiss') {
-      Navigation.dismissModal(this.props.componentId);
+      this.dismissModal();
     }
   }
+
+  dismissModal = () => Navigation.dismissModal(this.props.componentId);
 
   setCameraRef = (ref) => {
     this.camera = ref;
@@ -55,6 +57,7 @@ export default class CameraScreen extends React.PureComponent {
       const data = await this.camera.takePictureAsync(options);
       if (this.props.onPhotoTaken) {
         this.props.onPhotoTaken(data);
+        this.dismissModal();
       }
     }
   };
@@ -71,6 +74,7 @@ export default class CameraScreen extends React.PureComponent {
 
       if (this.props.onBarCodeRead) {
         this.props.onBarCodeRead(data);
+        this.dismissModal();
       }
     }
   };

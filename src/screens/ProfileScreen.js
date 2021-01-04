@@ -1,14 +1,17 @@
 import React from 'react';
 import {Alert, StyleSheet} from 'react-native';
 import {phonecall} from 'react-native-communications';
+import {Navigation} from 'react-native-navigation';
 import {Button, View, Colors, Avatar, Text, ListItem} from 'react-native-ui-lib';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import assets from '../../assets';
 import {Divider} from '../components/Divider';
+import {showSuccessToast} from '../components/Toast';
 import {CONTACT_PHONE} from '../constants';
 import {setGuestRoot} from '../navigation';
+import {SCREENS} from '../navigation/screens';
 
-export default function profileScreen({store}) {
+export default function profileScreen({serverApi, store}) {
   return class ProfileScreen extends React.PureComponent {
     static options() {
       return {
@@ -31,13 +34,21 @@ export default function profileScreen({store}) {
     }
 
     loadUser = async () => {
-      const user = await store.getUser();
+      const {user} = await serverApi.getProfile();
+      store.setUser(user);
       this.setState({user, isLoading: false});
     };
 
     logout = () => {
       store.logoutUser();
       setGuestRoot();
+    };
+
+    onProfileChanged = (user) => {
+      if (user) {
+        this.setState({user});
+        showSuccessToast('Profilis atnaujintas');
+      }
     };
 
     onPressLogout = () => {
@@ -58,28 +69,58 @@ export default function profileScreen({store}) {
       phonecall(CONTACT_PHONE, true);
     };
 
+    onPressEditProfile = () => {
+      const {user} = this.state;
+      Navigation.showModal({
+        stack: {
+          children: [
+            {
+              component: {
+                name: SCREENS.EDIT_PROFILE,
+                passProps: {
+                  profile: user,
+                  onDone: this.onProfileChanged,
+                },
+              },
+            },
+          ],
+        },
+      });
+    };
+
     render() {
-      if (this.state.isLoading) {
+      const {user, isLoading} = this.state;
+      if (isLoading) {
         return null;
       }
 
-      const {user} = this.state;
+      const {name, photo, startTime, startPosition, checkpointsFound, checkpointsTotal, penalty} = user;
       return (
         <View useSafeArea flex>
           <View centerH paddingT-10 paddingB-20 bg-primaryColor>
-            <Avatar size={120} source={assets.avatar} />
-            <Text center text70BO white marginT-20>
-              #21 {user.name}
+            <Avatar size={120} source={photo ? {uri: photo} : assets.avatar} />
+            <Text center text70BO white marginT-10>
+              #21 {name}
             </Text>
+            <Button
+              marginT-10
+              color={Colors.primaryColor}
+              backgroundColor="white"
+              iconSource={Icon.getImageSourceSync('pencil', 25)}
+              iconStyle={styles.editIcon}
+              size="small"
+              label="Redaguoti Profilį"
+              onPress={this.onPressEditProfile}
+            />
           </View>
           <View paddingH-page paddingV-20>
             <View marginB-8>
               <SectionTitle title="Mano Statistika" />
             </View>
-            <StatsRow label="Startas" value="12:53:05" />
-            <StatsRow label="Startinė pozicija" value="21" />
-            <StatsRow label="Surasta paslėptų patikros taškų" value="1/5" />
-            <StatsRow label="Nuobauda" value="00:00:40" />
+            <StatsRow label="Startas" value={startTime} />
+            <StatsRow label="Startinė pozicija" value={startPosition} />
+            <StatsRow label="Surasta paslėptų patikros taškų" value={`${checkpointsFound}/${checkpointsTotal}`} />
+            <StatsRow label="Nuobauda" value={penalty} />
           </View>
           <Divider />
           <View paddingH-page paddingV-20>
@@ -129,5 +170,9 @@ const StatsRow = ({label, value}) => (
 const styles = StyleSheet.create({
   logoutButton: {
     height: 48,
+  },
+  editIcon: {
+    width: 18,
+    height: 18,
   },
 });

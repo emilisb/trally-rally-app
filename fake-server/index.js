@@ -3,7 +3,7 @@ const {measureDistance} = require('./helpers');
 
 const app = express();
 const port = 3000;
-const host = 'http://localhost';
+const host = 'http://192.168.1.114';
 
 const fs = require('fs');
 const path = require('path');
@@ -63,12 +63,7 @@ app.post('/questions/:id', (req, res) => {
     question.submitted = true;
 
     if (question.type === 'photo') {
-      const publicPath = `uploads/answer-${Math.random().toString()}.jpg`;
-      const filePath = path.join(__dirname, `public/${publicPath}`);
-      // eslint-disable-next-line no-undef
-      fs.writeFileSync(filePath, Buffer.from(answer, 'base64'));
-
-      question.lastAnswer = `${host}:${port}/${publicPath}`;
+      question.lastAnswer = uploadImage(answer);
     } else {
       question.lastAnswer = answer;
     }
@@ -78,6 +73,32 @@ app.post('/questions/:id', (req, res) => {
     res.json({success: false});
   }
 });
+
+app.get('/user', (req, res) => {
+  validateAuth(req.headers);
+  res.json({user});
+});
+
+app.post('/user', (req, res) => {
+  validateAuth(req.headers);
+  const {name, phone, photoData} = req.body;
+
+  user.name = name;
+  user.phone = phone;
+  if (photoData) {
+    user.photo = uploadImage(photoData);
+  }
+
+  res.json({success: true, user});
+});
+
+function uploadImage(data) {
+  const publicPath = `uploads/${Math.random().toString()}.jpg`;
+  const filePath = path.join(__dirname, `public/${publicPath}`);
+  // eslint-disable-next-line no-undef
+  fs.writeFileSync(filePath, Buffer.from(data, 'base64'));
+  return `${host}:${port}/${publicPath}`;
+}
 
 function validateAuth(headers) {
   const authToken = headers.authorization;

@@ -38,4 +38,21 @@ export class ServerApi {
     });
     return response.data;
   }
+
+  async getProfile() {
+    return this.fetch({
+      url: `${config.SERVER}/user`,
+      method: 'GET',
+      withAuth: true,
+    });
+  }
+
+  async updateProfile({name, phone, photoData}) {
+    return this.fetch({
+      url: `${config.SERVER}/user`,
+      method: 'POST',
+      body: {name, phone, photoData},
+      withAuth: true,
+    });
+  }
 }

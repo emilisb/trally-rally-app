@@ -9,4 +9,5 @@ export const SCREENS = {
   WELCOME: `${PREFIX}.welcome`,
   CAMERA: `${PREFIX}.camera`,
   TOAST_OVERLAY: `${PREFIX}.toast`,
+  EDIT_PROFILE: `${PREFIX}.editProfile`,
 };

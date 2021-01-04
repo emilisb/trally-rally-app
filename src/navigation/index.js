@@ -11,7 +11,13 @@ export const registerComponents = () => {
     require('../screens/QuestionScreen').default(singletons.serverApi()),
   );
   Navigation.registerComponent(SCREENS.PROFILE, () =>
-    require('../screens/ProfileScreen').default({store: singletons.store()}),
+    require('../screens/ProfileScreen').default({serverApi: singletons.serverApi(), store: singletons.store()}),
+  );
+  Navigation.registerComponent(SCREENS.EDIT_PROFILE, () =>
+    require('../screens/EditProfileScreen').default({
+      serverApi: singletons.serverApi(),
+      store: singletons.store(),
+    }),
   );
   Navigation.registerComponent(SCREENS.LOGIN, () =>
     require('../screens/LoginScreen').default({
