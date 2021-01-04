@@ -17,6 +17,7 @@ const SPRING_CONFIG = {mass: 2, damping: 500, stiffness: 200};
 export default function homeScreen(serverApi) {
   return class HomeScreen extends React.PureComponent {
     positionWatchId = null;
+    questionComponentId = null;
 
     static options() {
       return {
@@ -66,6 +67,8 @@ export default function homeScreen(serverApi) {
       const isNewUnlock = unlockedQuestion?.id !== prevUnlockedQuestion;
       if (unlockedQuestion && isNewUnlock) {
         this.onQuestionUnlocked(unlockedQuestion);
+      } else if (prevUnlockedQuestion && !unlockedQuestion) {
+        this.onQuestionLocked(prevUnlockedQuestion);
       }
     };
 
@@ -91,17 +94,22 @@ export default function homeScreen(serverApi) {
       showGenericToast(`Klausimas "${question.title}" atrakintas.`);
     };
 
+    onQuestionLocked = (questionId) => {
+      Navigation.pop(this.questionComponentId);
+      showGenericToast('Jūs palikote klausimo zoną.');
+    };
+
     onQuestionUpdate = (question) => {
       const questions = this.state.questions.map((item) => (item.id === question.id ? question : item));
       this.setState({questions});
     };
 
-    onPressQuestion = (item, index) => {
+    onPressQuestion = async (item, index) => {
       if (item.locked) {
         return;
       }
 
-      Navigation.push(this.props.componentId, {
+      this.questionComponentId = await Navigation.push(this.props.componentId, {
         component: {
           name: SCREENS.QUESTION,
           passProps: {

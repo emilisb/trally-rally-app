@@ -131,7 +131,7 @@ export default function editProfileScreen({serverApi, store}) {
             keyboardType="phone-pad"
             value={phone}
             onChangeText={this.onChangePhone}
-            placeholder="Kontaktinis Telefono Nr."
+            placeholder="Telefono Nr."
           />
         </KeyboardAwareScrollView>
       );
