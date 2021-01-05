@@ -114,7 +114,7 @@ function getQuestionConverter({lat, long}) {
     return {
       ...question,
       title: isLocked ? `-Užrakintas Klausimas ${index + 1}-` : question.title,
-      question: !isLocked ? question.title : '',
+      question: !isLocked ? question.question : '',
       locked: isLocked,
     };
   };

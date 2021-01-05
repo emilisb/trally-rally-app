@@ -1,6 +1,7 @@
 import React from 'react';
 import {StyleSheet} from 'react-native';
-import {View, Text, TouchableOpacity, Colors} from 'react-native-ui-lib';
+import {View, Text, TouchableOpacity, Colors, Image} from 'react-native-ui-lib';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import {RNCamera} from 'react-native-camera';
 import assets from '../../assets';
 import {Navigation} from 'react-native-navigation';
@@ -32,6 +33,9 @@ export default class CameraScreen extends React.PureComponent {
     super(props);
     this.state = {
       cameraError: false,
+      cameraType: RNCamera.Constants.Type.back,
+      flashMode: RNCamera.Constants.FlashMode.off,
+      mirrorMode: true,
     };
 
     Navigation.events().bindComponent(this);
@@ -79,6 +83,29 @@ export default class CameraScreen extends React.PureComponent {
     }
   };
 
+  onPressChangeCameraType = () => {
+    if (this.state.cameraType === RNCamera.Constants.Type.back) {
+      this.setState({
+        cameraType: RNCamera.Constants.Type.front,
+        mirrorMode: true,
+      });
+    } else {
+      this.setState({
+        cameraType: RNCamera.Constants.Type.back,
+        mirrorMode: false,
+      });
+    }
+  };
+
+  onPressToggleFlash = () => {
+    this.setState(({flashMode: prevFlashMode}) => ({
+      flashMode:
+        prevFlashMode === RNCamera.Constants.FlashMode.off
+          ? RNCamera.Constants.FlashMode.torch
+          : RNCamera.Constants.FlashMode.off,
+    }));
+  };
+
   renderCameraError = () => (
     <View paddingH-page marginT-20>
       <Text white text70>
@@ -103,18 +130,33 @@ export default class CameraScreen extends React.PureComponent {
     );
   }
 
+  renderTopButtons = () => (
+    <View flex row top right marginT-20 marginR-40>
+      <TouchableOpacity onPress={this.onPressChangeCameraType} marginR-40>
+        <Image source={assets.swap} style={styles.swapCamera} />
+      </TouchableOpacity>
+      <TouchableOpacity onPress={this.onPressToggleFlash}>
+        <Icon name="bolt" size={25} color={Colors.white} />
+      </TouchableOpacity>
+    </View>
+  );
+
   render() {
     const {mode} = this.props;
-    const {cameraError} = this.state;
+    const {cameraError, cameraType, flashMode, mirrorMode} = this.state;
     const isQrReaderMode = mode === MODES.barCode;
     return (
       <View flex>
         <RNCamera
           style={styles.camera}
           ref={this.setCameraRef}
+          type={cameraType}
+          mirrorImage={mirrorMode}
           onMountError={this.onCameraError}
           onBarCodeRead={isQrReaderMode ? this.onBarCodeRead : undefined}
+          flashMode={flashMode}
         />
+        {this.renderTopButtons()}
         {cameraError ? this.renderCameraError() : null}
         {isQrReaderMode ? this.renderQrReaderLabel() : this.renderShootButton()}
       </View>
@@ -123,7 +165,7 @@ export default class CameraScreen extends React.PureComponent {
 }
 
 const ShootButton = React.memo(({onPress}) => (
-  <TouchableOpacity onPress={onPress}>
+  <TouchableOpacity center onPress={onPress} hitSlop={{top: 40, left: 40, bottom: 40, right: 40}}>
     <View style={styles.shootButtonOuter}>
       <View style={styles.shootButtonInner} />
     </View>
@@ -152,5 +194,10 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     borderWidth: 1,
     borderColor: Colors.dark10,
+  },
+  swapCamera: {
+    width: 35,
+    height: 25,
+    tintColor: Colors.white,
   },
 });

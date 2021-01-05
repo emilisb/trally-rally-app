@@ -1,4 +1,4 @@
 export default {
-  SERVER: 'http://localhost:3000',
+  SERVER: 'http://192.168.1.114:3000',
   QR_MAGIC_WORD: 'trally-rally-',
 };

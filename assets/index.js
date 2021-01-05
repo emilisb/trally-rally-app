@@ -11,4 +11,7 @@ export default {
   get x() {
     return require('./x.png');
   },
+  get swap() {
+    return require('./swap.png');
+  },
 };
