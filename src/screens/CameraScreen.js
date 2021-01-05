@@ -116,7 +116,7 @@ export default class CameraScreen extends React.PureComponent {
 
   renderQrReaderLabel() {
     return (
-      <Text white text70 center marginT-50>
+      <Text white text70 center marginB-80>
         Nukreipkite kamerą į QR kodą.
       </Text>
     );
