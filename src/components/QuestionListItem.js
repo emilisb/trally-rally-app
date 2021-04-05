@@ -6,6 +6,7 @@ import * as Animatable from 'react-native-animatable';
 import {getPointsLabel} from '../helpers/number-formats';
 import {getQuestionType, getSubmissionStatus} from '../helpers/question-labels';
 import {StyleSheet} from 'react-native';
+import {getStaticUrl} from '../helpers/url';
 
 export const QuestionListItem = React.memo(({item, index, onPress}) => {
   const animationProps = AnimatableManager.presets.fadeIn;
@@ -14,7 +15,7 @@ export const QuestionListItem = React.memo(({item, index, onPress}) => {
   const isLocked = item.locked;
   const imageSource = isLocked
     ? Icon.getImageSourceSync('lock', PixelRatio.getPixelSizeForLayoutSize(54), Colors.primaryColor)
-    : {uri: item.image};
+    : {uri: getStaticUrl(item.image)};
   const subtitle = isLocked
     ? `Klausimas atsirakins ${item.maxDistance} m. atstumu nuo ieškomos vietos`
     : getQuestionType(item.type);

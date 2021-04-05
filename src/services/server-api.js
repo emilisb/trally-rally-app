@@ -9,14 +9,14 @@ export class ServerApi {
     return this;
   }
 
-  async login(code) {
-    return this.fetch({url: `${config.SERVER}/auth/login`, method: 'POST', body: {code}});
+  async login(username, password) {
+    return this.fetch({url: `${config.SERVER}/auth/login`, method: 'POST', body: {username, password}});
   }
 
   async submitAnswer(questionId, answer) {
     return this.fetch({
-      url: `${config.SERVER}/questions/${questionId}`,
-      method: 'POST',
+      url: `${config.SERVER}/questions/${questionId}/submit`,
+      method: 'PUT',
       body: {answer},
       withAuth: true,
     });
@@ -34,14 +34,14 @@ export class ServerApi {
       url,
       method,
       data: body,
-      headers: withAuth ? {Authorization: this.authToken, ...defaultHeaders} : defaultHeaders,
+      headers: withAuth ? {Authorization: `Bearer ${this.authToken}`, ...defaultHeaders} : defaultHeaders,
     });
     return response.data;
   }
 
   async getProfile() {
     return this.fetch({
-      url: `${config.SERVER}/user`,
+      url: `${config.SERVER}/account`,
       method: 'GET',
       withAuth: true,
     });
@@ -49,9 +49,9 @@ export class ServerApi {
 
   async updateProfile({name, phone, photoData}) {
     return this.fetch({
-      url: `${config.SERVER}/user`,
+      url: `${config.SERVER}/account`,
       method: 'POST',
-      body: {name, phone, photoData},
+      body: {name, phone, avatar: photoData},
       withAuth: true,
     });
   }

@@ -1,10 +1,12 @@
+import {QuestionType} from '../constants';
+
 export function getQuestionType(type) {
   switch (type) {
-    case 'photo':
+    case QuestionType.PHOTO:
       return 'Foto klausimas';
-    case 'input':
+    case QuestionType.INPUT:
       return 'Atviras klausimas';
-    case 'qr':
+    case QuestionType.QR:
       return 'QR kodas';
   }
 }

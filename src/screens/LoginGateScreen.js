@@ -22,7 +22,14 @@ export default function loginGateScreen({serverApi, store}) {
         const authToken = await store.getAuthToken();
         serverApi.setAuthToken(authToken);
 
-        setLoggedInRoot();
+        try {
+          const profile = await serverApi.getProfile();
+          if (profile) {
+            setLoggedInRoot();
+          }
+        } catch (e) {
+          setGuestRoot();
+        }
       } else {
         setGuestRoot();
       }

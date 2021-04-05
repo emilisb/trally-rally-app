@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {Navigation} from 'react-native-navigation';
 import assets from '../../assets';
 import {SCREENS} from '../navigation/screens';
+import {getStaticUrl} from '../helpers/url';
 
 const SAVE_BUTTON_ID = 'save';
 const DISMISS_BUTTON_ID = 'dismiss';
@@ -38,7 +39,7 @@ export default function editProfileScreen({serverApi, store}) {
       this.state = {
         name: props.profile.name,
         phone: props.profile.phone,
-        photoUri: props.profile.photo,
+        photoUri: getStaticUrl(props.profile.avatar),
         photoData: null,
       };
 

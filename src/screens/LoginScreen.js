@@ -20,36 +20,37 @@ export default function loginScreen({serverApi, store}) {
     }
 
     state = {
-      code: '',
+      phone: '',
+      password: '',
       isLoading: false,
     };
 
-    onChangeCode = (code) => this.setState({code});
+    onChangePhone = (phone) => this.setState({phone});
+
+    onChangePassword = (password) => this.setState({password});
 
     onPressContact = () => {
       phonecall(CONTACT_PHONE, true);
     };
 
     onPressLogIn = async () => {
-      const {code, isLoading} = this.state;
-      if (!code || isLoading) {
+      const {phone, password, isLoading} = this.state;
+      if (!phone || !password || isLoading) {
         return;
       }
 
       try {
         this.setState({isLoading: true});
-        const {success, authToken, user} = await serverApi.login(code);
-        if (success) {
-          serverApi.setAuthToken(authToken);
+        const {accessToken, user} = await serverApi.login(phone, password);
+        serverApi.setAuthToken(accessToken);
 
-          await store.setAuthToken(authToken);
-          await store.setUser(user);
+        await store.setAuthToken(accessToken);
+        await store.setUser(user);
 
-          setLoggedInRoot();
-        } else {
-          showErrorToast('Neteisingas prisijungimo kodas.');
-        }
+        setLoggedInRoot();
       } catch (e) {
+        console.log(e);
+        // showErrorToast('Neteisingas prisijungimo kodas.');
         showErrorToast('Nenumatyta klaida, pamėginkite dar kartą.');
       } finally {
         this.setState({
@@ -66,8 +67,15 @@ export default function loginScreen({serverApi, store}) {
             <TextField
               autoCapitalize="none"
               returnKeyType="done"
-              placeholder="Prisijungimo kodas"
-              onChangeText={this.onChangeCode}
+              placeholder="Tel. Numeris"
+              onChangeText={this.onChangePhone}
+            />
+            <TextField
+              secureTextEntry
+              autoCapitalize="none"
+              returnKeyType="done"
+              placeholder="Slaptažodis"
+              onChangeText={this.onChangePassword}
               onSubmitEditing={this.onPressLogIn}
             />
             <Button

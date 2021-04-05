@@ -8,6 +8,8 @@ import ScaledImage from '../components/ScaledImage';
 import {showErrorToast, showSuccessToast} from '../components/Toast';
 import {SCREENS} from '../navigation/screens';
 import {MODES} from './CameraScreen';
+import {QuestionType} from '../constants';
+import {getStaticUrl} from '../helpers/url';
 
 export default function questionScreen(serverApi) {
   return class QuestionScreen extends React.PureComponent {
@@ -27,7 +29,7 @@ export default function questionScreen(serverApi) {
     constructor(props) {
       super(props);
       this.state = {
-        photoUri: props.item.type === 'photo' ? props.item.lastAnswer : null,
+        photoUri: props.item.type === QuestionType.PHOTO ? getStaticUrl(props.item.lastAnswer) : null,
         answer: props.item.lastAnswer,
         photoId: 0, // Used for refreshing the image preview after retaking a photo
       };
@@ -44,13 +46,14 @@ export default function questionScreen(serverApi) {
 
     onPressSave = async () => {
       try {
-        const {answer} = this.state;
+        const {answer, photoUri} = this.state;
         const {item, componentId, onDone} = this.props;
         const response = await serverApi.submitAnswer(item.id, answer);
 
         if (response && response.success) {
           if (onDone) {
-            onDone(response.question);
+            const lastAnswer = item.type === QuestionType.PHOTO ? getStaticUrl(photoUri) : answer;
+            onDone({...item, lastAnswer, submitted: true});
           }
 
           Navigation.pop(componentId);
@@ -152,11 +155,11 @@ export default function questionScreen(serverApi) {
     renderAnswer() {
       const {item} = this.props;
       switch (item.type) {
-        case 'input':
+        case QuestionType.INPUT:
           return this.renderInputField();
-        case 'photo':
+        case QuestionType.PHOTO:
           return this.renderTakePhotoButton();
-        case 'qr':
+        case QuestionType.QR:
           return this.renderScanQrButton();
       }
     }
