@@ -62,7 +62,7 @@ export default function editProfileScreen({serverApi, store}) {
         ...this.props.profile,
         name,
         phone,
-        photo: photoUri,
+        avatar: photoUri,
       };
 
       await serverApi.updateProfile({name, phone, photoData});

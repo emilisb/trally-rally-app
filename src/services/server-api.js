@@ -23,7 +23,11 @@ export class ServerApi {
   }
 
   async fetchQuestions({lat, long}) {
-    return this.fetch({url: `${config.SERVER}/questions?lat=${lat}&long=${long}`, method: 'GET', withAuth: true});
+    return this.fetch({
+      url: `${config.SERVER}/questions?latitude=${lat}&longitude=${long}`,
+      method: 'GET',
+      withAuth: true,
+    });
   }
 
   async fetch({url, body, method, withAuth}) {
