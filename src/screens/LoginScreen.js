@@ -49,9 +49,7 @@ export default function loginScreen({serverApi, store}) {
 
         setLoggedInRoot();
       } catch (e) {
-        console.log(e);
-        // showErrorToast('Neteisingas prisijungimo kodas.');
-        showErrorToast('Nenumatyta klaida, pamėginkite dar kartą.');
+        showErrorToast('Neteisingas prisijungimo kodas.');
       } finally {
         this.setState({
           isLoading: false,

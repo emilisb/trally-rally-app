@@ -98,7 +98,7 @@ export default function profileScreen({serverApi, store}) {
       const {name, avatar, startTime, startPosition, checkpointsFound, checkpointsTotal, penalty} = user;
       return (
         <View useSafeArea flex>
-          <ScrollView bounces={false}>
+          <ScrollView bounces={false} contentContainerStyle={{flex: 1}}>
             <View centerH paddingT-10 paddingB-20 bg-primaryColor>
               <Avatar size={120} source={avatar ? {uri: getStaticUrl(avatar)} : assets.avatar} />
               <Text center text70BO white marginT-10>
@@ -121,8 +121,8 @@ export default function profileScreen({serverApi, store}) {
               </View>
               <StatsRow label="Startas" value={startTime} />
               <StatsRow label="Startinė pozicija" value={startPosition} />
-              <StatsRow label="Surasta paslėptų patikros taškų" value={`${checkpointsFound}/${checkpointsTotal}`} />
-              <StatsRow label="Nuobauda" value={penalty} />
+              {/* <StatsRow label="Surasta paslėptų patikros taškų" value={`${checkpointsFound}/${checkpointsTotal}`} />
+              <StatsRow label="Nuobauda" value={penalty} /> */}
             </View>
             <Divider />
             <View paddingH-page paddingV-20>
@@ -139,20 +139,22 @@ export default function profileScreen({serverApi, store}) {
                 </ListItem.Part>
               </ListItem>
             </View>
+            <View flex bottom>
+              <Button
+                text70BO
+                outline
+                outlineWidth={1}
+                outlineColor={Colors.grey70}
+                fullWidth
+                enableShadow
+                label="Atsijungti"
+                color={Colors.red30}
+                backgroundColor={Colors.white}
+                style={styles.logoutButton}
+                onPress={this.onPressLogout}
+              />
+            </View>
           </ScrollView>
-          <Button
-            text70BO
-            outline
-            outlineWidth={1}
-            outlineColor={Colors.grey70}
-            fullWidth
-            enableShadow
-            label="Atsijungti"
-            color={Colors.red30}
-            backgroundColor={Colors.white}
-            style={styles.logoutButton}
-            onPress={this.onPressLogout}
-          />
         </View>
       );
     }

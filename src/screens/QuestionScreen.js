@@ -170,17 +170,19 @@ export default function questionScreen(serverApi) {
       const width = Dimensions.get('window').width - 40;
       return (
         <KeyboardAwareScrollView contentContainerStyle={styles.contentContainer} extraScrollHeight={20}>
-          <ScaledImage
-            uri={item.image}
-            width={width}
-            customStyle={styles.image}
-            imageProps={{nativeID: `image${item.id}Dest`}}
-          />
+          {item.image ? (
+            <ScaledImage
+              uri={getStaticUrl(item.image)}
+              width={width}
+              customStyle={styles.image}
+              imageProps={{nativeID: `image${item.id}Dest`}}
+            />
+          ) : null}
           <Text text50 marginT-12 nativeID="title">
             {item.title}
           </Text>
           <Text text80 nativeID="description">
-            {item.question}
+            {item.text}
           </Text>
           {this.renderAnswer()}
           {photoUri ? (
