@@ -18,19 +18,20 @@ export default function loginGateScreen({serverApi, store}) {
     checkLoginStatus = async () => {
       const isLoggedIn = await store.isLoggedIn();
 
-      if (isLoggedIn) {
-        const authToken = await store.getAuthToken();
-        serverApi.setAuthToken(authToken);
+      if (!isLoggedIn) {
+        setGuestRoot();
+        return;
+      }
 
-        try {
-          const profile = await serverApi.getProfile();
-          if (profile) {
-            setLoggedInRoot();
-          }
-        } catch (e) {
-          setGuestRoot();
+      const authToken = await store.getAuthToken();
+      serverApi.setAuthToken(authToken);
+
+      try {
+        const profile = await serverApi.getProfile();
+        if (profile) {
+          setLoggedInRoot();
         }
-      } else {
+      } catch (e) {
         setGuestRoot();
       }
     };

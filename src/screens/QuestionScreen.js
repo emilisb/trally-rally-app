@@ -111,14 +111,10 @@ export default function questionScreen(serverApi) {
 
     renderTakePhotoButton() {
       const {photoUri} = this.state;
+      const label = photoUri ? 'Pakeisti nuotrauką' : 'Pateikti nuotrauką';
       return (
         <View marginT-12>
-          <Button
-            label={photoUri ? 'Pakeisti nuotrauką' : 'Pateikti nuotrauką'}
-            iconSource={Icon.getImageSourceSync('camera', 24)}
-            iconStyle={styles.photoIcon}
-            onPress={this.onPressTakePhoto}
-          />
+          <CameraButton label={label} onPress={this.onPressTakePhoto} />
         </View>
       );
     }
@@ -126,12 +122,7 @@ export default function questionScreen(serverApi) {
     renderScanQrButton() {
       return (
         <View marginT-12>
-          <Button
-            label="Nuskenuoti QR kodą"
-            iconSource={Icon.getImageSourceSync('camera', 24)}
-            iconStyle={styles.photoIcon}
-            onPress={this.onPressScanQr}
-          />
+          <CameraButton label="Nuskenuoti QR kodą" onPress={this.onPressScanQr} />
         </View>
       );
     }
@@ -195,6 +186,15 @@ export default function questionScreen(serverApi) {
     }
   };
 }
+
+const CameraButton = React.memo(({label, onPress}) => (
+  <Button
+    label={label}
+    iconSource={Icon.getImageSourceSync('camera', 24)}
+    iconStyle={styles.photoIcon}
+    onPress={onPress}
+  />
+));
 
 const styles = StyleSheet.create({
   contentContainer: {

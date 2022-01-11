@@ -7,6 +7,8 @@ import assets from '../../assets';
 import {Navigation} from 'react-native-navigation';
 import config from '../config';
 
+const DISMISS_BUTTON_ID = 'dismiss';
+
 export const MODES = {
   photo: 'photo',
   barCode: 'barcode',
@@ -18,7 +20,7 @@ export default class CameraScreen extends React.PureComponent {
       topBar: {
         leftButtonColor: Colors.white,
         leftButtons: {
-          id: 'dismiss',
+          id: DISMISS_BUTTON_ID,
           icon: assets.x,
         },
       },
@@ -42,7 +44,7 @@ export default class CameraScreen extends React.PureComponent {
   }
 
   navigationButtonPressed({buttonId}) {
-    if (buttonId === 'dismiss') {
+    if (buttonId === DISMISS_BUTTON_ID) {
       this.dismissModal();
     }
   }
@@ -51,6 +53,20 @@ export default class CameraScreen extends React.PureComponent {
 
   setCameraRef = (ref) => {
     this.camera = ref;
+  };
+
+  openFrontCamera = () => {
+    this.setState({
+      cameraType: RNCamera.Constants.Type.front,
+      mirrorMode: true,
+    });
+  };
+
+  openBackCamera = () => {
+    this.setState({
+      cameraType: RNCamera.Constants.Type.back,
+      mirrorMode: false,
+    });
   };
 
   onPressShoot = async () => {
@@ -85,15 +101,9 @@ export default class CameraScreen extends React.PureComponent {
 
   onPressChangeCameraType = () => {
     if (this.state.cameraType === RNCamera.Constants.Type.back) {
-      this.setState({
-        cameraType: RNCamera.Constants.Type.front,
-        mirrorMode: true,
-      });
+      this.openFrontCamera();
     } else {
-      this.setState({
-        cameraType: RNCamera.Constants.Type.back,
-        mirrorMode: false,
-      });
+      this.openBackCamera();
     }
   };
 

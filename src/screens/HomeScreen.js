@@ -7,13 +7,6 @@ import {SCREENS} from '../navigation/screens';
 import {QuestionListItem} from '../components/QuestionListItem';
 import {showErrorToast, showGenericToast} from '../components/Toast';
 
-const MULTIPLIER = 1.2;
-const POP_MULTIPLIER = 1.0;
-const LONG_DURATION = 540 * MULTIPLIER;
-const SHORT_DURATION = 210 * MULTIPLIER;
-
-const SPRING_CONFIG = {mass: 2, damping: 500, stiffness: 200};
-
 export default function homeScreen(serverApi) {
   return class HomeScreen extends React.PureComponent {
     positionWatchId = null;
@@ -122,90 +115,7 @@ export default function homeScreen(serverApi) {
                 text: `Klausimas #${index + 1}`,
               },
             },
-            animations: {
-              push: {
-                content: {
-                  alpha: {
-                    from: 0,
-                    to: 1,
-                    duration: SHORT_DURATION,
-                  },
-                },
-                sharedElementTransitions: [
-                  {
-                    fromId: `image${item.id}`,
-                    toId: `image${item.id}Dest`,
-                    duration: LONG_DURATION,
-                    interpolation: {type: 'spring', ...SPRING_CONFIG},
-                  },
-                ],
-                elementTransitions: [
-                  {
-                    id: 'title',
-                    alpha: {
-                      from: 0,
-                      duration: SHORT_DURATION,
-                    },
-                    translationY: {
-                      from: -16,
-                      duration: SHORT_DURATION,
-                    },
-                  },
-                  {
-                    id: 'description',
-                    alpha: {
-                      from: 0,
-                      duration: SHORT_DURATION,
-                    },
-                    translationY: {
-                      from: 16,
-                      duration: SHORT_DURATION,
-                    },
-                  },
-                ],
-              },
-              pop: {
-                content: {
-                  alpha: {
-                    from: 1,
-                    to: 0,
-                    duration: SHORT_DURATION * POP_MULTIPLIER,
-                  },
-                },
-                sharedElementTransitions: [
-                  {
-                    fromId: `image${item.id}Dest`,
-                    toId: `image${item.id}`,
-                    duration: LONG_DURATION * POP_MULTIPLIER,
-                    interpolation: {type: 'spring', ...SPRING_CONFIG},
-                  },
-                ],
-                elementTransitions: [
-                  {
-                    id: 'title',
-                    alpha: {
-                      to: 0,
-                      duration: SHORT_DURATION,
-                    },
-                    translationY: {
-                      to: -16,
-                      duration: SHORT_DURATION,
-                    },
-                  },
-                  {
-                    id: 'description',
-                    alpha: {
-                      to: 0,
-                      duration: SHORT_DURATION,
-                    },
-                    translationY: {
-                      to: 16,
-                      duration: SHORT_DURATION,
-                    },
-                  },
-                ],
-              },
-            },
+            animations: buildTransitionAnimations({questionId: item.id}),
           },
         },
       });
@@ -237,3 +147,97 @@ export default function homeScreen(serverApi) {
     }
   };
 }
+
+const buildTransitionAnimations = ({questionId}) => {
+  const MULTIPLIER = 1.2;
+  const POP_MULTIPLIER = 1.0;
+  const LONG_DURATION = 540 * MULTIPLIER;
+  const SHORT_DURATION = 210 * MULTIPLIER;
+
+  const SPRING_CONFIG = {mass: 2, damping: 500, stiffness: 200};
+
+  return {
+    push: {
+      content: {
+        alpha: {
+          from: 0,
+          to: 1,
+          duration: SHORT_DURATION,
+        },
+      },
+      sharedElementTransitions: [
+        {
+          fromId: `image${questionId}`,
+          toId: `image${questionId}Dest`,
+          duration: LONG_DURATION,
+          interpolation: {type: 'spring', ...SPRING_CONFIG},
+        },
+      ],
+      elementTransitions: [
+        {
+          id: 'title',
+          alpha: {
+            from: 0,
+            duration: SHORT_DURATION,
+          },
+          translationY: {
+            from: -16,
+            duration: SHORT_DURATION,
+          },
+        },
+        {
+          id: 'description',
+          alpha: {
+            from: 0,
+            duration: SHORT_DURATION,
+          },
+          translationY: {
+            from: 16,
+            duration: SHORT_DURATION,
+          },
+        },
+      ],
+    },
+    pop: {
+      content: {
+        alpha: {
+          from: 1,
+          to: 0,
+          duration: SHORT_DURATION * POP_MULTIPLIER,
+        },
+      },
+      sharedElementTransitions: [
+        {
+          fromId: `image${questionId}Dest`,
+          toId: `image${questionId}`,
+          duration: LONG_DURATION * POP_MULTIPLIER,
+          interpolation: {type: 'spring', ...SPRING_CONFIG},
+        },
+      ],
+      elementTransitions: [
+        {
+          id: 'title',
+          alpha: {
+            to: 0,
+            duration: SHORT_DURATION,
+          },
+          translationY: {
+            to: -16,
+            duration: SHORT_DURATION,
+          },
+        },
+        {
+          id: 'description',
+          alpha: {
+            to: 0,
+            duration: SHORT_DURATION,
+          },
+          translationY: {
+            to: 16,
+            duration: SHORT_DURATION,
+          },
+        },
+      ],
+    },
+  };
+};

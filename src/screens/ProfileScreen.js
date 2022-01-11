@@ -95,7 +95,7 @@ export default function profileScreen({serverApi, store}) {
         return null;
       }
 
-      const {name, avatar, startTime, startPosition, checkpointsFound, checkpointsTotal, penalty} = user;
+      const {name, avatar, startTime, startPosition} = user;
       return (
         <View useSafeArea flex>
           <ScrollView bounces={false} contentContainerStyle={{flex: 1}}>
@@ -121,8 +121,6 @@ export default function profileScreen({serverApi, store}) {
               </View>
               <StatsRow label="Startas" value={startTime} />
               <StatsRow label="Startinė pozicija" value={startPosition} />
-              {/* <StatsRow label="Surasta paslėptų patikros taškų" value={`${checkpointsFound}/${checkpointsTotal}`} />
-              <StatsRow label="Nuobauda" value={penalty} /> */}
             </View>
             <Divider />
             <View paddingH-page paddingV-20>

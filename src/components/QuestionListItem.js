@@ -11,7 +11,7 @@ import {getStaticUrl} from '../helpers/url';
 export const QuestionListItem = React.memo(({item, index, onPress}) => {
   const animationProps = AnimatableManager.presets.fadeIn;
   const imageAnimationProps = AnimatableManager.getRandomDelay();
-  const onPressItem = () => onPress(item, index);
+
   const isLocked = item.locked;
   const imageSource = isLocked
     ? Icon.getImageSourceSync('lock', PixelRatio.getPixelSizeForLayoutSize(54), Colors.primaryColor)
@@ -19,6 +19,8 @@ export const QuestionListItem = React.memo(({item, index, onPress}) => {
   const subtitle = isLocked
     ? `Klausimas atsirakins ${item.maxDistance} m. atstumu nuo ieškomos vietos`
     : getQuestionType(item.type);
+
+  const onPressItem = () => onPress(item, index);
 
   return (
     <Animatable.View {...animationProps}>
